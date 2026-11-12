@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jay Hub - Portail 100% Interactif</title>
+    <!-- Tailwind CSS pour un design moderne et responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0b0f19',
+                        cardBg: '#131c2e',
+                        neonCyan: '#06b6d4',
+                        neonPink: '#ec4899',
+                        neonPurple: '#8b5cf6',
+                        neonGreen: '#10b981'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glow-cyan { box-shadow: 0 0 20px rgba(6, 182, 212, 0.4); }
+        .glow-pink { box-shadow: 0 0 20px rgba(236, 72, 153, 0.4); }
+        .glow-purple { box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
+        .glow-green { box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0b0f19; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    </style>
+</head>
+<body class="bg-darkBg text-gray-100 min-h-screen flex flex-col justify-between selection:bg-neonPink selection:text-white">
+
+    <!-- En-tête / Navigation -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-darkBg/80 border-b border-gray-800 px-4 lg:px-12 py-4">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-neonCyan to-neonPink flex items-center justify-center glow-cyan">
+                    <i class="fa-solid fa-gamepad text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold bg-gradient-to-r from-neonCyan via-neonPurple to-neonPink bg-clip-text text-transparent">Jay Hub</h1>
+                    <p class="text-xs text-gray-400">Visites sur cet appareil : <span id="header-visits" class="text-neonCyan font-bold">1</span></p>
+                </div>
+            </div>
+
+            <!-- Boutons de navigation rapide -->
+            <nav class="flex flex-wrap gap-2">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-neonCyan/20 text-neonCyan border border-neonCyan/50 glow-cyan">
+                    <i class="fa-solid fa-house mr-2"></i>Accueil
+                </button>
+                <button onclick="switchTab('arcade')" id="nav-arcade" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-gray-800 text-gray-300 hover:bg-gray-700">
+                    <i class="fa-solid fa-bolt mr-2"></i>Jeu Infini & Bombes
+                </button>
+                <button onclick="switchTab('funfacts')" id="nav-funfacts" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-gray-800 text-gray-300 hover:bg-gray-700">
+                    <i class="fa-solid fa-lightbulb mr-2"></i>Citations & Fun
+                </button>
+                <button onclick="switchTab('sketchpad')" id="nav-sketchpad" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-gray-800 text-gray-300 hover:bg-gray-700">
+                    <i class="fa-solid fa-paintbrush mr-2"></i>Dessin
+                </button>
+                <button onclick="switchTab('lofi')" id="nav-lofi" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-gray-800 text-gray-300 hover:bg-gray-700">
+                    <i class="fa-solid fa-music mr-2"></i>Synth Lo-Fi
+                </button>
+                <button onclick="switchTab('todos')" id="nav-todos" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-gray-800 text-gray-300 hover:bg-gray-700">
+                    <i class="fa-solid fa-list-check mr-2"></i>To-Do
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Contenu Principal -->
+    <main class="flex-grow max-w-7xl mx-auto w-full p-4 lg:p-8">
+
+        <!-- 1. TABLEAU DE BORD / ACCUEIL DYNAMIQUE -->
+        <section id="tab-dashboard" class="space-y-8 tab-content">
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-900/40 via-purple-900/40 to-pink-900/40 border border-gray-800 p-8 glow-purple">
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-neonPurple/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-neonCyan/20 text-neonCyan border border-neonCyan/30">Jay Hub v3.0 Live</span>
+                    <h2 class="text-3xl lg:text-5xl font-extrabold tracking-tight">Bienvenue sur Jay Hub !</h2>
+                    <p class="text-gray-300 text-base lg:text-lg">Explorez nos mini-activités interactives intégrées. Testez votre survie dans le jeu infini, dessinez, écoutez des mélodies synthétiques et gérez vos tâches en toute autonomie.</p>
+                </div>
+            </div>
+
+            <!-- Statistiques dynamiques -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-cardBg border border-gray-800 p-6 rounded-2xl flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-neonCyan/10 flex items-center justify-center text-neonCyan text-2xl">
+                        <i class="fa-solid fa-stopwatch"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Temps passé sur le site</p>
+                        <p id="stat-timer" class="text-xl font-bold text-gray-100">00:00</p>
+                    </div>
+                </div>
+
+                <div class="bg-cardBg border border-gray-800 p-6 rounded-2xl flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-neonPink/10 flex items-center justify-center text-neonPink text-2xl">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Record Survie Jeu</p>
+                        <p id="stat-highscore" class="text-xl font-bold text-gray-100">0.0s</p>
+                    </div>
+                </div>
+
+                <div class="bg-cardBg border border-gray-800 p-6 rounded-2xl flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-neonPurple/10 flex items-center justify-center text-neonPurple text-2xl">
+                        <i class="fa-solid fa-bolt-lightning"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Visites sur l'appareil</p>
+                        <p id="stat-visits" class="text-xl font-bold text-gray-100">1</p>
+                    </div>
+                </div>
+
+                <div class="bg-cardBg border border-gray-800 p-6 rounded-2xl flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-neonGreen/10 flex items-center justify-center text-neonGreen text-2xl">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Statut Système</p>
+                        <p class="text-xl font-bold text-neonGreen">100% Opérationnel</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accès rapide aux cartes -->
+            <div>
+                <h3 class="text-xl font-bold mb-4">Accès rapide aux activités</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div onclick="switchTab('arcade')" class="bg-cardBg border border-gray-800 p-6 rounded-2xl cursor-pointer hover:border-neonCyan/50 transition group">
+                        <div class="w-12 h-12 rounded-xl bg-neonCyan/20 flex items-center justify-center text-neonCyan mb-4 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-bomb text-xl"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-1">Jeu Infini & Bombes</h4>
+                        <p class="text-sm text-gray-400">Survivez le plus longtemps possible, évitez les bombes et gagnez en vitesse !</p>
+                    </div>
+
+                    <div onclick="switchTab('sketchpad')" class="bg-cardBg border border-gray-800 p-6 rounded-2xl cursor-pointer hover:border-neonPink/50 transition group">
+                        <div class="w-12 h-12 rounded-xl bg-neonPink/20 flex items-center justify-center text-neonPink mb-4 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-paintbrush text-xl"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-1">Mini-Outil de Dessin</h4>
+                        <p class="text-sm text-gray-400">Exprimez votre créativité sur un canvas numérique interactif.</p>
+                    </div>
+
+                    <div onclick="switchTab('lofi')" class="bg-cardBg border border-gray-800 p-6 rounded-2xl cursor-pointer hover:border-neonPurple/50 transition group">
+                        <div class="w-12 h-12 rounded-xl bg-neonPurple/20 flex items-center justify-center text-neonPurple mb-4 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-music text-xl"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-1">Synthétiseur Lo-Fi</h4>
+                        <p class="text-sm text-gray-400">Jouez des notes relaxantes grâce à l'API Web Audio native.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. MINI-JEU D'ARCADE (MODE INFINI, ACCÉLÉRATION & BOMBES) -->
+        <section id="tab-arcade" class="space-y-6 hidden tab-content">
+            <div class="flex flex-col md:flex-row justify-between items-center bg-cardBg border border-gray-800 p-6 rounded-2xl gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-neonCyan flex items-center gap-2">
+                        <i class="fa-solid fa-bomb"></i> Jeu Infini & Pièges Explosifs
+                    </h2>
+                    <p class="text-gray-400 text-sm">Le jeu accélère sans fin ! Cliquez sur les points lumineux, mais évitez absolument les bombes <i class="fa-solid fa-skull text-neonPink"></i>.</p>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="text-center">
+                        <p class="text-xs text-gray-400">Score (Cibles)</p>
+                        <p id="arcade-score" class="text-2xl font-extrabold text-neonPink">0</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xs text-gray-400">Survie</p>
+                        <p id="arcade-time" class="text-2xl font-extrabold text-neonCyan">0.0s</p>
+                    </div>
+                    <button id="arcade-start-btn" onclick="startArcadeGame()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-neonCyan to-neonPink font-bold text-white shadow-lg hover:opacity-90 transition">
+                        Démarrer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Zone de jeu -->
+            <div id="arcade-container" class="relative w-full h-[480px] bg-cardBg border border-gray-800 rounded-2xl overflow-hidden flex items-center justify-center">
+                <div id="arcade-message" class="text-center space-y-4 p-6">
+                    <i class="fa-solid fa-skull text-6xl text-neonPink animate-pulse"></i>
+                    <h3 class="text-xl font-bold">Prêt pour le mode infini ?</h3>
+                    <p class="text-sm text-gray-400 max-w-md mx-auto">Le rythme s'accélère continuellement. Un seul clic sur une bombe et c'est perdu !</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. GÉNÉRATEUR DE CITATIONS / BLAGUES / FUN FACTS -->
+        <section id="tab-funfacts" class="space-y-6 hidden tab-content">
+            <div class="bg-cardBg border border-gray-800 p-6 rounded-2xl text-center space-y-2">
+                <h2 class="text-2xl font-bold text-neonPurple flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-lightbulb"></i> Fontaine à Inspiration & Fun Facts
+                </h2>
+                <p class="text-gray-400 text-sm">Découvrez des citations motivantes, des blagues de développeur ou des faits insolites instantanément.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button onclick="generateContent('quote')" class="p-4 rounded-xl bg-cardBg border border-gray-800 hover:border-neonCyan transition flex items-center justify-center gap-3 font-semibold text-neonCyan">
+                    <i class="fa-solid fa-quote-left text-xl"></i> Citation Motivante
+                </button>
+                <button onclick="generateContent('joke')" class="p-4 rounded-xl bg-cardBg border border-gray-800 hover:border-neonPink transition flex items-center justify-center gap-3 font-semibold text-neonPink">
+                    <i class="fa-solid fa-face-laugh text-xl"></i> Blague Geek / Dev
+                </button>
+                <button onclick="generateContent('fact')" class="p-4 rounded-xl bg-cardBg border border-gray-800 hover:border-neonPurple transition flex items-center justify-center gap-3 font-semibold text-neonPurple">
+                    <i class="fa-solid fa-brain text-xl"></i> Fun Fact Insolite
+                </button>
+            </div>
+
+            <!-- Carte d'affichage -->
+            <div class="bg-cardBg border border-gray-800 p-8 rounded-2xl relative min-h-[220px] flex flex-col justify-between shadow-xl">
+                <div class="absolute top-4 right-4 text-gray-700 text-4xl pointer-events-none">
+                    <i class="fa-solid fa-quote-right"></i>
+                </div>
+                <div>
+                    <span id="content-category" class="text-xs uppercase tracking-widest font-bold px-3 py-1 rounded-full bg-gray-800 text-gray-300">Sélectionnez une option</span>
+                    <p id="content-display" class="text-lg lg:text-xl font-medium text-gray-200 mt-6 leading-relaxed">
+                        Cliquez sur l'un des boutons ci-dessus pour afficher du contenu dynamique interactif !
+                    </p>
+                </div>
+                <div class="flex justify-end mt-6">
+                    <button onclick="copyContent()" class="text-xs text-gray-400 hover:text-white flex items-center gap-1 bg-gray-800 px-3 py-1.5 rounded-lg border border-gray-700 transition">
+                        <i class="fa-solid fa-copy"></i> Copier
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. MINI-OUTIL DE DESSIN / SKETCHPAD -->
+        <section id="tab-sketchpad" class="space-y-6 hidden tab-content">
+            <div class="flex flex-col md:flex-row justify-between items-center bg-cardBg border border-gray-800 p-6 rounded-2xl gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-neonPink flex items-center gap-2">
+                        <i class="fa-solid fa-paintbrush"></i> Sketchpad Numérique
+                    </h2>
+                    <p class="text-gray-400 text-sm">Dessinez librement avec votre souris ou votre doigt sur le canvas.</p>
+                </div>
+                <!-- Outils de dessin -->
+                <div class="flex flex-wrap items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs text-gray-400">Couleur :</label>
+                        <input type="color" id="draw-color" value="#06b6d4" class="w-10 h-10 rounded-lg bg-transparent cursor-pointer border border-gray-700">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs text-gray-400">Taille :</label>
+                        <input type="range" id="draw-size" min="1" max="30" value="5" class="w-24 accent-neonPink">
+                    </div>
+                    <button onclick="clearCanvas()" class="px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl text-sm font-semibold hover:bg-red-500/30 transition">
+                        <i class="fa-solid fa-trash mr-1"></i> Effacer
+                    </button>
+                    <button onclick="downloadCanvas()" class="px-4 py-2 bg-neonCyan/20 text-neonCyan border border-neonCyan/30 rounded-xl text-sm font-semibold hover:bg-neonCyan/30 transition">
+                        <i class="fa-solid fa-download mr-1"></i> Sauvegarder
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-cardBg border border-gray-800 rounded-2xl overflow-hidden p-2">
+                <canvas id="paint-canvas" class="w-full h-[500px] bg-slate-950 rounded-xl cursor-crosshair block"></canvas>
+            </div>
+        </section>
+
+        <!-- 5. LECTEUR / BOÎTE À SONS / SÉQUENCEUR LO-FI -->
+        <section id="tab-lofi" class="space-y-6 hidden tab-content">
+            <div class="bg-cardBg border border-gray-800 p-6 rounded-2xl text-center space-y-2">
+                <h2 class="text-2xl font-bold text-neonPurple flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-music"></i> Synthétiseur Web Audio Minimaliste
+                </h2>
+                <p class="text-gray-400 text-sm">Cliquez sur les touches du piano virtuel pour jouer des notes en direct grâce à l'API Web Audio.</p>
+            </div>
+
+            <div class="bg-cardBg border border-gray-800 p-8 rounded-2xl flex flex-col items-center justify-center space-y-6">
+                <div class="flex items-center gap-4 w-full max-w-md justify-between">
+                    <span class="text-sm font-medium text-gray-300">Type d'onde (Timbre) :</span>
+                    <select id="synth-waveform" class="bg-gray-800 border border-gray-700 text-gray-200 px-4 py-2 rounded-xl text-sm focus:outline-none focus:border-neonPurple">
+                        <option value="sine">Doux (Sine)</option>
+                        <option value="triangle" selected>Chaud (Triangle)</option>
+                        <option value="sawtooth">Riche (Sawtooth)</option>
+                        <option value="square">Rétro (Square)</option>
+                    </select>
+                </div>
+
+                <!-- Clavier Virtuel -->
+                <div id="piano-keys" class="grid grid-cols-4 sm:grid-cols-8 gap-3 w-full max-w-3xl">
+                    <!-- Les touches seront générées ici -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. SECTION NOTES / TO-DO LIST INTERACTIVE -->
+        <section id="tab-todos" class="space-y-6 hidden tab-content">
+            <div class="bg-cardBg border border-gray-800 p-6 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-neonGreen flex items-center gap-2">
+                        <i class="fa-solid fa-list-check"></i> Gestionnaire To-Do Personnel
+                    </h2>
+                    <p class="text-gray-400 text-sm">Ajoutez, cochez et sauvegardez vos tâches en toute simplicité (localStorage).</p>
+                </div>
+            </div>
+
+            <!-- Formulaire d'ajout -->
+            <div class="bg-cardBg border border-gray-800 p-6 rounded-2xl flex gap-3">
+                <input type="text" id="todo-input" placeholder="Ajouter une nouvelle tâche..." class="flex-grow bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-gray-200 focus:outline-none focus:border-neonGreen">
+                <button onclick="addTodoItem()" class="px-6 py-3 bg-gradient-to-r from-neonGreen to-emerald-600 text-white font-bold rounded-xl shadow hover:opacity-90 transition flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Ajouter
+                </button>
+            </div>
+
+            <!-- Liste des tâches -->
+            <div class="bg-cardBg border border-gray-800 p-6 rounded-2xl space-y-3 min-h-[250px]">
+                <div id="todo-empty" class="text-center py-12 text-gray-500">
+                    <i class="fa-solid fa-clipboard-list text-4xl mb-2"></i>
+                    <p>Aucune tâche pour le moment. Profitez-en pour vous détendre ou ajoutez-en une !</p>
+                </div>
+                <ul id="todo-list" class="space-y-3"></ul>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Pied de page -->
+    <footer class="border-t border-gray-800 py-6 px-4 text-center text-xs text-gray-500 bg-darkBg">
+        <p>Jay Hub &bull; Plateforme interactive autonome &bull; Conception responsive & dynamique</p>
+    </footer>
+
+    <!-- Boîte de dialogue / Message modal personnalisé -->
+    <div id="custom-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-cardBg border border-gray-800 p-6 rounded-2xl max-w-md w-full space-y-4 shadow-2xl">
+            <h3 id="modal-title" class="text-lg font-bold text-neonCyan">Information</h3>
+            <p id="modal-text" class="text-sm text-gray-300">Message...</p>
+            <div class="flex justify-end">
+                <button onclick="closeModal()" class="px-5 py-2 rounded-xl bg-neonCyan text-darkBg font-bold text-sm hover:opacity-90 transition">Compris</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script JavaScript Complet & Modulaire -->
+    <script>
+        /* --- Gestion des onglets (Tabs) --- */
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-gray-800 text-gray-300 hover:bg-gray-700";
+            });
+
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('nav-' + tabId);
+            activeBtn.className = "nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-neonCyan/20 text-neonCyan border border-neonCyan/50 glow-cyan";
+
+            if(tabId === 'sketchpad') {
+                resizeCanvas();
+            }
+        }
+
+        /* --- Système de Statistiques et Compteur de Visites Appareil --- */
+        let secondsElapsed = 0;
+        let visitCount = parseInt(localStorage.getItem('jayhub_visits') || '0');
+        visitCount++;
+        localStorage.setItem('jayhub_visits', visitCount);
+        document.getElementById('stat-visits').innerText = visitCount;
+        document.getElementById('header-visits').innerText = visitCount;
+
+        setInterval(() => {
+            secondsElapsed++;
+            let mins = Math.floor(secondsElapsed / 60);
+            let secs = secondsElapsed % 60;
+            document.getElementById('stat-timer').innerText = 
+                (mins < 10 ? '0' + mins : mins) + ':' + (secs < 10 ? '0' + secs : secs);
+        }, 1000);
+
+        let highScore = parseFloat(localStorage.getItem('jayhub_highscore') || '0');
+        document.getElementById('stat-highscore').innerText = highScore.toFixed(1) + 's';
+
+        /* --- Modale personnalisée --- */
+        function showModal(title, text) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-text').innerText = text;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        /* --- 2. MINI-JEU D'ARCADE (MODE INFINI & BOMBES) --- */
+        let arcadeScore = 0;
+        let survivalTime = 0;
+        let arcadeInterval = null;
+        let survivalTimerInterval = null;
+        let isGameRunning = false;
+
+        function startArcadeGame() {
+            const container = document.getElementById('arcade-container');
+            container.innerHTML = '';
+            arcadeScore = 0;
+            survivalTime = 0;
+            isGameRunning = true;
+            document.getElementById('arcade-score').innerText = arcadeScore;
+            document.getElementById('arcade-time').innerText = '0.0s';
+            document.getElementById('arcade-start-btn').disabled = true;
+            document.getElementById('arcade-start-btn').classList.add('opacity-50');
+
+            // Chronomètre de survie (incrémente de 0.1s)
+            survivalTimerInterval = setInterval(() => {
+                survivalTime += 0.1;
+                document.getElementById('arcade-time').innerText = survivalTime.toFixed(1) + 's';
+            }, 100);
+
+            // Boucle de spawn dynamique avec accélération progressive
+            scheduleNextSpawn();
+        }
+
+        function scheduleNextSpawn() {
+            if(!isGameRunning) return;
+
+            spawnItem();
+
+            // Plus le temps passe, plus l'intervalle de spawn diminue (le jeu accélère)
+            // Intervalle initial 900ms, réduit de 15ms toutes les secondes, plancher minimal à 250ms
+            let currentDelay = Math.max(250, 900 - (survivalTime * 25));
+            arcadeInterval = setTimeout(scheduleNextSpawn, currentDelay);
+        }
+
+        function spawnItem() {
+            if(!isGameRunning) return;
+            const container = document.getElementById('arcade-container');
+            const item = document.createElement('div');
+
+            // 25% de chance qu'une bombe apparaisse, 75% qu'une cible normale apparaisse
+            const isBomb = Math.random() < 0.25;
+
+            if(isBomb) {
+                item.className = 'absolute w-12 h-12 rounded-full bg-gradient-to-r from-red-600 to-pink-600 cursor-pointer flex items-center justify-center text-white shadow-lg transform hover:scale-110 transition animate-pulse';
+                item.innerHTML = '<i class="fa-solid fa-skull text-sm"></i>';
+                item.onclick = (e) => {
+                    e.stopPropagation();
+                    endArcadeGame('bombe');
+                };
+            } else {
+                item.className = 'absolute w-12 h-12 rounded-full bg-gradient-to-r from-neonCyan to-neonPurple cursor-pointer flex items-center justify-center text-white shadow-lg transform hover:scale-110 transition';
+                item.innerHTML = '<i class="fa-solid fa-bullseye text-sm"></i>';
+                item.onclick = (e) => {
+                    e.stopPropagation();
+                    arcadeScore += 1;
+                    document.getElementById('arcade-score').innerText = arcadeScore;
+                    playBeep(700, 0.06);
+                    item.remove();
+                };
+            }
+
+            const maxX = container.clientWidth - 60;
+            const maxY = container.clientHeight - 60;
+            const randomX = Math.max(10, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+
+            item.style.left = randomX + 'px';
+            item.style.top = randomY + 'px';
+
+            container.appendChild(item);
+
+            // Durée de vie de l'item à l'écran (accélère également avec le temps, de 1400ms à 700ms min)
+            let itemLifetime = Math.max(700, 1400 - (survivalTime * 15));
+            setTimeout(() => {
+                if(item.parentElement) {
+                    item.remove();
+                }
+            }, itemLifetime);
+        }
+
+        function endArcadeGame(reason) {
+            if(!isGameRunning) return;
+            isGameRunning = false;
+            clearTimeout(arcadeInterval);
+            clearInterval(survivalTimerInterval);
+
+            const container = document.getElementById('arcade-container');
+            
+            let currentHigh = parseFloat(localStorage.getItem('jayhub_highscore') || '0');
+            if(survivalTime > currentHigh) {
+                localStorage.setItem('jayhub_highscore', survivalTime);
+                document.getElementById('stat-highscore').innerText = survivalTime.toFixed(1) + 's';
+            }
+
+            let reasonText = reason === 'bombe' ? 'Vous avez touché une bombe mortelle !' : 'Partie terminée.';
+
+            container.innerHTML = `
+                <div class="text-center space-y-4 p-6">
+                    <i class="fa-solid fa-explosion text-6xl text-neonPink animate-bounce"></i>
+                    <h3 class="text-2xl font-bold">Game Over !</h3>
+                    <p class="text-sm text-red-400 font-semibold">${reasonText}</p>
+                    <p class="text-base text-gray-300">Temps de survie : <span class="text-neonCyan font-bold">${survivalTime.toFixed(1)} secondes</span></p>
+                    <p class="text-sm text-gray-400">Cibles collectées : <span class="text-neonPink font-bold">${arcadeScore}</span></p>
+                    <button onclick="startArcadeGame()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-neonCyan to-neonPink font-bold text-white shadow-lg hover:opacity-90 transition">
+                        Rejouer
+                    </button>
+                </div>
+            `;
+            document.getElementById('arcade-start-btn').disabled = false;
+            document.getElementById('arcade-start-btn').classList.remove('opacity-50');
+        }
+
+        /* --- 3. CITATIONS & FUN FACTS --- */
+        const contentData = {
+            quote: [
+                "« Le meilleur moyen de prédire l'avenir, c'est de l'inventer. » – Alan Kay",
+                "« La simplicité est la sophistication suprême. » – Léonard de Vinci",
+                "« Ne comptez pas les jours, faites que les jours comptent. » – Muhammad Ali",
+                "« Tout ce que vous pouvez imaginer est réel. » – Pablo Picasso",
+                "« L'échec est le fondement de la réussite. » – Lao-Tseu"
+            ],
+            joke: [
+                "Il y a 10 types de personnes dans le monde : celles qui comprennent le binaire, et celles qui ne le comprennent pas.",
+                "Pourquoi les plongeurs plongent-ils toujours en arrière et jamais en avant ? Parce que sinon ils tombent dans le bateau !",
+                "Un SQL entre dans un bar, s'approche de deux tables et demande : « Puis-je me joindre à vous ? »",
+                "Quel est le comble pour un électricien ? De ne pas être au courant !",
+                "Pourquoi les oiseaux volent-ils vers le sud en hiver ? Parce que c'est trop long d'y aller à pied !"
+            ],
+            fact: [
+                "Le miel ne se périme jamais. Des archéologues ont retrouvé du miel vieux de 3 000 ans dans des tombes égyptiennes et il était encore consommable.",
+                "Les poulpes ont trois cœurs et leur sang est de couleur bleue.",
+                "Il y a plus d'arbres sur Terre que d'étoiles dans notre galaxie (environ 3 000 milliards d'arbres).",
+                "Les bananes sont naturellement radioactives en raison de leur forte teneur en potassium.",
+                "Une journée sur Vénus est plus longue qu'une année sur Vénus !"
+            ]
+        };
+
+        function generateContent(type) {
+            const list = contentData[type];
+            const randomIndex = Math.floor(Math.random() * list.length);
+            const text = list[randomIndex];
+            
+            const titles = { quote: 'Citation Motivante', joke: 'Blague Geek / Dev', fact: 'Fun Fact Insolite' };
+            document.getElementById('content-category').innerText = titles[type];
+            document.getElementById('content-display').innerText = text;
+        }
+
+        function copyContent() {
+            const text = document.getElementById('content-display').innerText;
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showModal("Succès", "Le texte a bien été copié dans le presse-papier !");
+            } catch (err) {
+                showModal("Erreur", "Impossible de copier le texte.");
+            }
+            document.body.removeChild(textArea);
+        }
+
+        /* --- 4. MINI-OUTIL DE DESSIN (SKETCHPAD) --- */
+        const canvas = document.getElementById('paint-canvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width - 16;
+            canvas.height = 500;
+            ctx.fillStyle = '#020617';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        setTimeout(() => {
+            canvas.width = canvas.parentElement.clientWidth - 16;
+            canvas.height = 500;
+            ctx.fillStyle = '#020617';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }, 100);
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            lastX = (e.clientX || e.touches[0].clientX) - rect.left;
+            lastY = (e.clientY || e.touches[0].clientY) - rect.top;
+        }
+
+        function draw(e) {
+            if(!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const currentX = (e.clientX || e.touches[0].clientX) - rect.left;
+            const currentY = (e.clientY || e.touches[0].clientY) - rect.top;
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(currentX, currentY);
+            ctx.strokeStyle = document.getElementById('draw-color').value;
+            ctx.lineWidth = document.getElementById('draw-size').value;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+
+            lastX = currentX;
+            lastY = currentY;
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        canvas.addEventListener('touchstart', (e) => { startDrawing(e); e.preventDefault(); });
+        canvas.addEventListener('touchmove', (e) => { draw(e); e.preventDefault(); });
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function clearCanvas() {
+            ctx.fillStyle = '#020617';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function downloadCanvas() {
+            const link = document.createElement('a');
+            link.download = 'mon-dessin-jayhub.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        /* --- 5. SYNTHÉTISEUR WEB AUDIO LO-FI --- */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        const notes = [
+            { name: 'Do (C4)', freq: 261.63 },
+            { name: 'Ré (D4)', freq: 293.66 },
+            { name: 'Mi (E4)', freq: 329.63 },
+            { name: 'Fa (F4)', freq: 349.23 },
+            { name: 'Sol (G4)', freq: 392.00 },
+            { name: 'La (A4)', freq: 440.00 },
+            { name: 'Si (B4)', freq: 493.88 },
+            { name: 'Do (C5)', freq: 523.25 }
+        ];
+
+        function playBeep(frequency, duration = 0.3) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            const waveformType = document.getElementById('synth-waveform').value;
+            osc.type = waveformType;
+            osc.frequency.value = frequency;
+
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        const pianoContainer = document.getElementById('piano-keys');
+        notes.forEach(note => {
+            const btn = document.createElement('button');
+            btn.className = "flex flex-col items-center justify-center p-6 rounded-xl bg-gray-900 border border-gray-700 hover:border-neonPurple text-gray-200 hover:text-neonPurple shadow transition transform active:scale-95";
+            btn.innerHTML = `<span class="font-bold text-base">${note.name.split(' ')[0]}</span><span class="text-xs text-gray-500 mt-1">${note.name.split(' ')[1]}</span>`;
+            btn.onclick = () => playBeep(note.freq, 0.4);
+            pianoContainer.appendChild(btn);
+        });
+
+        /* --- 6. TO-DO LIST INTERACTIVE --- */
+        let todos = JSON.parse(localStorage.getItem('jayhub_todos')) || [];
+
+        function renderTodos() {
+            const listEl = document.getElementById('todo-list');
+            const emptyEl = document.getElementById('todo-empty');
+            listEl.innerHTML = '';
+
+            if(todos.length === 0) {
+                emptyEl.classList.remove('hidden');
+                return;
+            }
+            emptyEl.classList.add('hidden');
+
+            todos.forEach((todo, index) => {
+                const li = document.createElement('li');
+                li.className = "flex items-center justify-between p-4 rounded-xl bg-gray-900 border border-gray-800 transition";
+                li.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" ${todo.completed ? 'checked' : ''} onchange="toggleTodo(${index})" class="w-5 h-5 accent-neonGreen cursor-pointer rounded">
+                        <span class="${todo.completed ? 'line-through text-gray-500' : 'text-gray-200'} text-sm font-medium">${escapeHtml(todo.text)}</span>
+                    </div>
+                    <button onclick="deleteTodo(${index})" class="text-gray-500 hover:text-red-400 p-2 transition">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                `;
+                listEl.appendChild(li);
+            });
+        }
+
+        function addTodoItem() {
+            const input = document.getElementById('todo-input');
+            const text = input.value.trim();
+            if(!text) return;
+
+            todos.push({ text: text, completed: false });
+            input.value = '';
+            saveAndRenderTodos();
+        }
+
+        function toggleTodo(index) {
+            todos[index].completed = !todos[index].completed;
+            saveAndRenderTodos();
+        }
+
+        function deleteTodo(index) {
+            todos.splice(index, 1);
+            saveAndRenderTodos();
+        }
+
+        function saveAndRenderTodos() {
+            localStorage.setItem('jayhub_todos', JSON.stringify(todos));
+            renderTodos();
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        document.getElementById('todo-input').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') addTodoItem();
+        });
+
+        renderTodos();
+    </script>
+</body>
+</html>
